@@ -13,7 +13,7 @@ const test2:TestCase = message => {
     let called = false
     eventHub.on('xxx', (data) => {
         called = true
-        console.assert(data==='发送的数据','接收的数据不匹配')
+        console.assert(data==='发送的数据1','接收的数据不匹配')
     })
     eventHub.emit('xxx','发送的数据')
     setTimeout(() => {
