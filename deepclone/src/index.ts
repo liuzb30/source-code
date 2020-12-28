@@ -1,35 +1,43 @@
 type Dictionary= {[key:string]:any}
-function deepClone(source:any, cache=new Map()){
-    if(source instanceof Object){
-        if(cache.has(source)){
-            return cache.get(source)
+function deepClone(target:any, cache=new Map()){
+    if(target instanceof Object){
+        if(cache.has(target)){
+            return cache.get(target)
         }else{
-            let result:Dictionary;
-            if(source instanceof Array){
-                result= []
-            }else if(source instanceof Function){
-                result = function (this:any){
-                    return source.apply(this,arguments)
-                }
-            }else if(source instanceof RegExp){
-                result = new RegExp(source.source, source.flags)
-            }else if(source instanceof Date){
-                result = new Date(source)
-            }else{
-                result = new Object()
+            let cloneTarget:Dictionary;
+            const targetType = getType(target)
+            switch (targetType){
+                case '[object Array]':
+                    cloneTarget = []
+                    break
+                case '[object Function]':
+                    cloneTarget = function (this:any){return target.apply(this,arguments)}
+                    break
+                case '[object RegExp]':
+                    cloneTarget = new RegExp(target.source, target.flags)
+                    break
+                case '[object Date]':
+                    cloneTarget = new Date(target)
+                    break
+                default:
+                    cloneTarget = new Object()
             }
-            cache.set(source,result)
-            for (let key in source){
-                if(source.hasOwnProperty(key)) {
-                    result[key] = deepClone(source[key],cache)
+            cache.set(target,cloneTarget)
+            for (let key in target){
+                if(target.hasOwnProperty(key)) {
+                    cloneTarget[key] = deepClone(target[key],cache)
                 }
             }
-            return result
+            return cloneTarget
         }
 
 
     }
-    return source
+    return target
+}
+
+function getType(target:any){
+    return Object.prototype.toString.call(target)
 }
 
 export default deepClone;
