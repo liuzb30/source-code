@@ -1,43 +1,19 @@
-type Dictionary= {[key:string]:any}
-function deepClone(target:any, cache=new Map()){
+type Dictionary = {[key:string]:any}
+function deepClone(target:any){
+    // 判断是否对象类型
     if(target instanceof Object){
-        if(cache.has(target)){
-            return cache.get(target)
+        let cloneTarget:Dictionary
+        if(target instanceof Array){
+            cloneTarget = [] //如果是数组，则初始化为空数组
         }else{
-            let cloneTarget:Dictionary;
-            const targetType = getType(target)
-            switch (targetType){
-                case '[object Array]':
-                    cloneTarget = []
-                    break
-                case '[object Function]':
-                    cloneTarget = function (this:any){return target.apply(this,arguments)}
-                    break
-                case '[object RegExp]':
-                    cloneTarget = new RegExp(target.source, target.flags)
-                    break
-                case '[object Date]':
-                    cloneTarget = new Date(target)
-                    break
-                default:
-                    cloneTarget = new Object()
-            }
-            cache.set(target,cloneTarget)
-            for (let key in target){
-                if(target.hasOwnProperty(key)) {
-                    cloneTarget[key] = deepClone(target[key],cache)
-                }
-            }
-            return cloneTarget
+            cloneTarget = {} //否则初始化为空对象
         }
-
-
+        for(let key in target){
+            // 遍历每个属性并返回复制后的值
+            cloneTarget[key] = deepClone(target[key])
+        }
+        return cloneTarget
     }
-    return target
+    return target  // 普通类型只要直接返回即可
 }
-
-function getType(target:any){
-    return Object.prototype.toString.call(target)
-}
-
-export default deepClone;
+export default deepClone
