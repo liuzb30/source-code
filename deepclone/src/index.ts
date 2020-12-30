@@ -5,6 +5,10 @@ function deepClone(target:any){
         let cloneTarget:Dictionary
         if(target instanceof Array){
             cloneTarget = [] //如果是数组，则初始化为空数组
+        }else if(target instanceof Function){
+            cloneTarget = function (this:any){
+                return target.apply(this, arguments)
+            }
         }else{
             cloneTarget = {} //否则初始化为空对象
         }

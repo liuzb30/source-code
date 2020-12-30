@@ -54,6 +54,12 @@ describe('deepClone', () => {
             assert(a2[2] !== a[2])
             assert.deepEqual(a, a2)
         })
+        it('能复制函数', ()=>{
+            const a = function (a:number,b:number){return a+b}
+            const a2 = deepClone(a)
+            assert(a!==a2)
+            assert(a(1,2)===a2(1,2))
+        })
     })
 
 })
