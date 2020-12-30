@@ -1,22 +1,27 @@
-const p1 = new Promise((resolve, reject) => {
-    setTimeout(()=>{
-        resolve('p1')},4000)
+let p1 = new Promise((resolve, reject) => {
+    setTimeout(() => {
+        resolve('p1')
+    }, 4000)
 
 })
 const p2 = new Promise((resolve, reject) => {
-    setTimeout(()=>{resolve('p2')},3000)
+    setTimeout(() => {
+        resolve('p2')
+    }, 3000)
 })
 
 const p3 = new Promise((resolve, reject) => {
-    setTimeout(()=>{resolve('p3')},5000)
+    setTimeout(() => {
+        resolve('p3')
+    }, 5000)
 })
 
-const arr=[p1,p2,p3]
+const arr = [p1, p2, p3]
 
 // arr.map(async p=> await p)
 
-async function forLoop(){
-    for(let i=0;i<arr.length;i++){
+async function forLoop() {
+    for (let i = 0; i < arr.length; i++) {
         const res = await arr[i]
         console.log(res)
     }
@@ -27,8 +32,8 @@ async function forLoop(){
 //     console.log(res);
 // })
 
-const mapLoop = async ()=>{
-    const promises = arr.map(async p=>{
+const mapLoop = async () => {
+    const promises = arr.map(async p => {
         const res = await p
         return res
     })
