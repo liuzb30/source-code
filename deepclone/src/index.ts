@@ -27,8 +27,11 @@ function deepClone(target:any){
             // 需要在递归之前缓存
             map.set(target,cloneTarget)
             for(let key in target){
-                // 遍历每个属性并返回复制后的值
-                cloneTarget[key] = deepClone(target[key])
+                // 过滤原型属性
+                if(target.hasOwnProperty(key)) {
+                    // 遍历每个属性并返回复制后的值
+                    cloneTarget[key] = deepClone(target[key])
+                }
             }
             return cloneTarget
         }
