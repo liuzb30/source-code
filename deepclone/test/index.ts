@@ -60,6 +60,14 @@ describe('deepClone', () => {
             assert(a!==a2)
             assert(a(1,2)===a2(1,2))
         })
+        it('能复制环', ()=>{
+            const a:Dictionary = {x:{y:111}}
+            a.self = a
+            const a2 = deepClone(a)
+            assert(a !== a2)
+            assert(a.x!==a2.x)
+            assert(a.x.y===a2.x.y)
+        })
     })
 
 })
