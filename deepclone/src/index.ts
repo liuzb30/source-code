@@ -42,22 +42,22 @@ function deepClone(target: any) {
 }
 
 const createObject = (target: Object) => {
-    let cloneTarget: Dictionary
+    let obj: Dictionary
     if (target instanceof Array) {
-        cloneTarget = [] //如果是数组，则初始化为空数组
+        obj = [] //如果是数组，则初始化为空数组
     } else if (target instanceof Function) {
-        cloneTarget = function (this: any) {
+        obj = function (this: any) {
             return target.apply(this, arguments)
         }
     } else if (target instanceof RegExp) {
         // 正则表达式对象会有两个属性，source和flags，分别对应构造函数的两个参数
-        cloneTarget = new RegExp(target.source, target.flags)
+        obj = new RegExp(target.source, target.flags)
     } else if (target instanceof Date) {
-        cloneTarget = new Date(target)
+        obj = new Date(target)
     } else {
-        cloneTarget = {} //否则初始化为空对象
+        obj = {} //否则初始化为空对象
     }
-    return cloneTarget
+    return obj
 }
 
 export default deepClone
