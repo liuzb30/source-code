@@ -54,19 +54,28 @@ describe('deepClone', () => {
             assert(a2[2] !== a[2])
             assert.deepEqual(a, a2)
         })
-        it('能复制函数', ()=>{
-            const a = function (a:number,b:number){return a+b}
+        it('能复制函数', () => {
+            const a = function (a: number, b: number) {
+                return a + b
+            }
             const a2 = deepClone(a)
-            assert(a!==a2)
-            assert(a(1,2)===a2(1,2))
+            assert(a !== a2)
+            assert(a(1, 2) === a2(1, 2))
         })
-        it('能复制环', ()=>{
-            const a:Dictionary = {x:{y:111}}
+        it('能复制环', () => {
+            const a: Dictionary = {x: {y: 111}}
             a.self = a
             const a2 = deepClone(a)
             assert(a !== a2)
-            assert(a.x!==a2.x)
-            assert(a.x.y===a2.x.y)
+            assert(a.x !== a2.x)
+            assert(a.x.y === a2.x.y)
+        })
+        it('复制正则表达式', () => {
+            const a = new RegExp('hi\d+', 'ig')
+            const a2 = deepClone(a)
+            assert(a !== a2)
+            assert(a.source === a2.source)
+            assert(a.flags === a2.flags)
         })
     })
 
