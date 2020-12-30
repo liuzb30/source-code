@@ -19,6 +19,8 @@ function deepClone(target:any){
             }else if(target instanceof RegExp){
                 // 正则表达式对象会有两个属性，source和flags，分别对应构造函数的两个参数
                 cloneTarget = new RegExp(target.source, target.flags)
+            }else if(target instanceof Date){
+                cloneTarget = new Date(target)
             }else{
                 cloneTarget = {} //否则初始化为空对象
             }
