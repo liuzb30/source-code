@@ -92,6 +92,19 @@ describe('deepClone', () => {
             assert(a.x!==a2.x)
             assert(a.x.y===a2.x.y)
         })
+        it("不会爆栈", () => {
+            const a = { child: null };
+            let b:Dictionary = a;
+            for (let i = 0; i < 10000; i++) {
+                b.child = {
+                    child: null
+                };
+                b = b.child;
+            }
+            const a2 = deepClone(a);
+            assert(a !== a2);
+            assert(a.child !== a2.child);
+        });
         it("很复杂的对象", () => {
             const a = {
                 n: NaN,
