@@ -1,24 +1,23 @@
-// 新版api
-function bind(thisArg,...arg1){
-    const fn = this
-    function returnFn(...arg2){
-        return fn.call((this instanceof returnFn) ? this : thisArg,...arg1,...arg2)
+//定义一个bind方法
+// 新版API
+function bind(thisArg,...args){
+    const fn = this  //获取被绑定的函数
+    function returnFn(...args2){
+        return fn.call((this instanceof returnFn) ? this: thisArg,...args,...args2)  //通过call来改变this指向
     }
-    returnFn.prototype = fn.prototype
+    returnFn.prototype = fn.prototype  // 把新函数的原型指向原函数的原型
     return returnFn
 }
-// 旧版api
+// 旧版API
 function bind(thisArg){
-    const fn = this
-    const arg1 = Array.prototype.slice.call(arguments,1)
+    const fn = this  //获取被绑定的函数
+    const args = Array.prototype.slice.call(arguments, 1)
     function returnFn(){
-        const arg2 = Array.prototype.slice.call(arguments,0)
-        return fn.apply((this instanceof returnFn)?this:thisArg, arg1.concat(arg2))
+        const args2 = Array.prototype.slice.call(arguments,0)
+        return fn.apply((this instanceof returnFn) ? this: thisArg,args.concat(args2))  //通过call来改变this指向
     }
-    returnFn.prototype = fn.prototype
+    returnFn.prototype = fn.prototype  // 把新函数的原型指向原函数的原型
     return returnFn
 }
-
-
-
+//导出bind
 module.exports = bind

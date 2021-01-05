@@ -2,24 +2,24 @@ const bind = require('../src/index')
 
 
 test1("fn.bind 能用");
-test2("this 绑定成功");
-test3("this, p1, p2 绑定成功");
-test4("this, p1 绑定成功，后传 p2 调用成功");
+test2("绑定this");
+test3("能获取绑定时的参数");
+test4("获取绑定后函数的参数");
 test5("new 的时候绑定了 p1, p2");
 test6("new 的时候绑定了 p1, p2，并且 fn 有 prototype.sayHi");
 test7("不用 new 但是用类似的对象");
 
 function test1(msg){
     Function.prototype.bind2 = bind
-    console.assert(Function.prototype.bind2!==undefined)
+    console.assert(typeof Function.prototype.bind2==='function' ) //断言bind2是一个函数
     console.log(msg);
 }
 
 
 function test2(msg){
-    const fn = function (){return this}
-    const newFn = fn.bind2({name:'xxx'})
-    console.assert(newFn().name==='xxx')
+    const fn = function (){return this} // 返回this
+    const newFn = fn.bind2({name:'xxx'}) // 绑定对象{name:'xxx'}
+    console.assert(newFn().name==='xxx') //断言返回的对象的name等于'xxx'
     console.log(msg)
 }
 
@@ -45,7 +45,7 @@ function test4(message) {
     const anotherFn2 = fn2.bind2({ name: "xxx" }, 123);
     console.assert(anotherFn2(245)[0].name === "xxx", "this");
     console.assert(anotherFn2(245)[1] === 123, "p1");
-    console.assert(anotherFn2(245)[2] === 245, "p22");
+    console.assert(anotherFn2(245)[2] === 245, "p2");
 }
 
 function test5(message) {
