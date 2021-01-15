@@ -24,21 +24,49 @@ function Promise(excutor: Function) {
     }
     excutor(resolve, reject)
 }
+type ThenObject={
+    then:Function
+}
 
 Promise.prototype.then = function (success?, fail?) {
+    success = typeof success ==='function' ? success : data=>data
+    fail = typeof fail ==='function' ? fail : error=>{throw new Error(error)}
 
-    if (typeof success === 'function') {
-        this.successCallbackArr.push(success)
+    const promise2 = new Promise((resolve,reject)=>{
+        this.successCallbackArr.push((data)=>{
+            try{
+                let result = success(data)
+                resolvePromise(promise2, result, resolve,reject)
+            }catch (e){
+                reject(e)
+            }
+
+        })
+        this.failCallbackArr.push((reason)=>{
+            try{
+                let result = fail(reason)
+                resolvePromise(promise2, result, resolve,reject)
+            }catch (e){
+                reject(e)
+            }
+        })
+    })
+    return promise2
+}
+
+const resolvePromise = function (promise2, result:ThenObject, resolve, reject){
+    if(promise2===result){
+        return reject(new TypeError('error due to circular reference'))
     }
-    if (typeof fail === 'function') {
-        this.failCallbackArr.push(fail)
+    if(result instanceof Promise){
+        result.then(resolve, reject)
+    }else{
+        resolve(result)
     }
 }
 
 function nextTick(fn) {
-    // @ts-ignore
     if (process !== undefined && typeof process.nextTick === 'function') {
-        // @ts-ignore
         return process.nextTick(fn)
     } else {
         let counter = 1

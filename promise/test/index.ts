@@ -5,7 +5,7 @@ import {describe} from 'mocha'
 chai.use(sinonChai)
 
 const assert = chai.assert
-import Promise from "../src/promise";
+import Promise from "../src/index";
 
 describe('Promise',()=>{
     it('是一个类',()=>{
@@ -282,12 +282,12 @@ describe('Promise',()=>{
     it('穿透实现',done => {
         const promise = new Promise((resolve, reject) => {
             setTimeout(() => {
-                resolve('lucas')
+                resolve('333')
             }, 0)
         })
         promise.then(null)
             .then(data => {
-                assert.equal(data,'lucas')
+                assert.equal(data,'333')
                 done()
             })
     })
