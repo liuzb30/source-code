@@ -22,15 +22,34 @@ describe('Promise',()=>{
             new Promise(false)
         })
     })
+    it('new Promise(fn)中的fn执行的时候接受resolve和reject两个函数',done=>{
+        new Promise((resolve,reject)=>{
+            assert.isFunction(resolve)
+            assert.isFunction(reject)
+            done()
+        })
+    })
     it('实例有then方法', ()=>{
         const promise = new Promise(()=>{})
         // @ts-ignore
         assert.isFunction(promise.then)
     })
-    it('then方法有两个参数, onFulfilled和onRejected是可选的',()=>{
+    it('2.2.1 then方法有两个参数, onFulfilled和onRejected是可选的',()=>{
         const promise = new Promise(()=>{})
         promise.then(null)
         assert(1===1)
+    })
+    it('2.2.2.1 onFulfilled必须在promise的状态是fulfilled之后被调用',done=>{
+        let called = false
+        const promise = new Promise((resolve,reject)=>{
+            resolve()
+            setTimeout(()=>{
+                assert(called===true)
+                done()
+            })
+        })
+
+        promise.then(()=>{called = true})
     })
 
 })
