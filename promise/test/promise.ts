@@ -85,5 +85,29 @@ describe('Promise',()=>{
             done()
         },0)
     })
+    it('2.2.4 onFulfilled必须在当前执行上下文执行完之后才被调用',done=>{
+        const fn = sinon.fake()
+        const promise = new Promise((resolve,reject)=>{
+            resolve()
+        })
+        promise.then(fn)
+        assert.isFalse(fn.called)
+        setTimeout(()=>{
+            assert(fn.called)
+            done()
+        },0)
+    })
+    it('2.2.4 onRejected 必须在当前执行上下文执行完之后才被调用',done=>{
+        const fn = sinon.fake()
+        const promise = new Promise((resolve,reject)=>{
+            reject()
+        })
+        promise.then(null, fn)
+        assert.isFalse(fn.called)
+        setTimeout(()=>{
+            assert(fn.called)
+            done()
+        },0)
+    })
 
 })
