@@ -146,5 +146,44 @@ describe('Promise',()=>{
             assert(callbacks[2].calledAfter(callbacks[1]))
         },0)
     })
+    it('2.2.7 then必须返回一个promise',()=>{
+        const promise = new Promise((resolve,reject)=>{resolve()})
+        const promise2 = promise.then(null)
+        // @ts-ignore
+        assert(promise2 instanceof Promise)
+    })
+    it('2.2.7.1 如果onFulfilled or onRejected返回一个值X,则要传给promise2', done=>{
+        const promise = new Promise((resolve,reject)=>{resolve()})
+        const promise2 = promise.then(()=>'成功')
+        promise2.then(x=>{
+            assert(x==='成功')
+            done()
+        })
+    })
+    it('2.2.7.2 如果onFulfilled or onRejected抛出一个异常e,则promise2 rejected e', done=>{
+        const promise = new Promise((resolve,reject)=>{resolve()})
+        const error = new Error()
+        const promise2 = promise.then(()=>{throw error}, ()=>{})
+        promise2.then(null, e=>{
+            assert(e===error)
+            done()
+        })
+    })
+    it('2.2.7.3 如果onFulfilled不是一个函数，promsise1的状态是fulfilled，promise2返回和promise1相同的值',done=>{
+        const promise = new Promise((resolve,reject)=>{resolve('成功')})
+        const promise2 = promise.then(null, ()=>{})
+        promise2.then(x=>{
+            assert(x==='成功')
+            done()
+        })
+    })
+    it('2.2.7.4 如果onRejected 不是一个函数，并且promsise1的状态是rejected，promise2 reject 相同的值', done=>{
+        const promise = new Promise((resolve,reject)=>{reject('失败')})
+        const promise2 = promise.then(()=>{},null)
+        promise2.then(null, r=>{
+            assert(r==='失败')
+            done()
+        })
+    })
 
 })
