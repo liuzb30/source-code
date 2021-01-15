@@ -62,5 +62,16 @@ describe('Promise',()=>{
             done()
         },0)
     })
+    it('2.2.3.1 onRejected 必须在promise的状态是rejected之后被调用',done=>{
+        let called = false
+        const promise = new Promise((resolve,reject)=>{
+            reject()
+            setTimeout(()=>{
+                assert(called===true)
+                done()
+            })
+        })
+        promise.then(null, ()=>{called = true})
+    })
 
 })

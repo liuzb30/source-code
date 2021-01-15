@@ -19,11 +19,18 @@ class Promise {
     }
 
     reject() {
+        this.state = 'rejected'
+        setTimeout(() => {
+            this.onRejected()
+        }, 0)
     }
 
     then(onFulfilled?, onRejected?) {
         if (typeof onFulfilled === 'function') {
             this.onFulfilled = onFulfilled
+        }
+        if(typeof onRejected === 'function'){
+            this.onRejected = onRejected
         }
     }
 }
