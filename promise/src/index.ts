@@ -19,6 +19,7 @@ class Promise {
     }
 
     reject() {
+        if(this.state!=='pending') return
         this.state = 'rejected'
         setTimeout(() => {
             this.onRejected()

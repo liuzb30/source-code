@@ -73,5 +73,17 @@ describe('Promise',()=>{
         })
         promise.then(null, ()=>{called = true})
     })
+    it('2.2.3.3 onRejected不能被多次调用', done=>{
+        const fn = sinon.fake()
+        const promise = new Promise((resolve,reject)=>{
+            reject()
+            reject()
+        })
+        promise.then(null, fn)
+        setTimeout(()=>{
+            assert(fn.calledOnce)
+            done()
+        },0)
+    })
 
 })
