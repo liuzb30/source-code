@@ -22,5 +22,10 @@ describe('Promise',()=>{
             new Promise(false)
         })
     })
+    it('实例有then方法', ()=>{
+        const promise = new Promise(()=>{})
+        // @ts-ignore
+        assert.isFunction(promise.then)
+    })
 
 })
