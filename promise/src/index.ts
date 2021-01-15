@@ -10,19 +10,19 @@ class Promise {
         fn(this.resolve.bind(this), this.reject.bind(this))
     }
 
-    resolve() {
+    resolve(result) {
         if(this.state!=='pending') return
         this.state = 'fulfilled'
         setTimeout(() => {
-            this.onFulfilled()
+            this.onFulfilled.call(undefined,result)
         }, 0)
     }
 
-    reject() {
+    reject(reason) {
         if(this.state!=='pending') return
         this.state = 'rejected'
         setTimeout(() => {
-            this.onRejected()
+            this.onRejected.call(undefined,reason)
         }, 0)
     }
 

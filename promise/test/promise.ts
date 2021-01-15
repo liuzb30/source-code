@@ -109,5 +109,15 @@ describe('Promise',()=>{
             done()
         },0)
     })
+    it('2.2.5 onFulfilled and onRejected必须被当做函数调用，且没有this',done=>{
+        const promise = new Promise((resolve,reject)=>{
+            resolve()
+        })
+        promise.then(function (){
+            'use strict' // 严格模式下 this 应该是undifined
+            assert(this===undefined)
+            done()
+        })
+    })
 
 })
