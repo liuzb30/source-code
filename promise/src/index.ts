@@ -11,6 +11,7 @@ class Promise {
     }
 
     resolve() {
+        if(this.state!=='pending') return
         this.state = 'fulfilled'
         setTimeout(() => {
             this.onFulfilled()

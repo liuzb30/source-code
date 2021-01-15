@@ -48,8 +48,19 @@ describe('Promise',()=>{
                 done()
             })
         })
-
         promise.then(()=>{called = true})
+    })
+    it('2.2.2.3 onFulfilled不能被多次调用', done=>{
+        const fn = sinon.fake()
+        const promise = new Promise(resolve=>{
+            resolve()
+            resolve()
+        })
+        promise.then(fn)
+        setTimeout(()=>{
+            assert(fn.calledOnce)
+            done()
+        },0)
     })
 
 })
