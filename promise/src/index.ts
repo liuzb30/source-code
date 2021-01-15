@@ -50,18 +50,47 @@ class Promise {
 
     resolveWith(x) {
         if (this === x) {
-            this.reject(new TypeError())
+            this.resolveWithSelf(x)
         } else if (x instanceof Promise) {
-            x.then(result => this.resolve(result), reason => this.reject(reason))
+            this.resolveWithPromise(x)
         } else if (x instanceof Object) {
-            try {
-                x.then(y => this.resolve(y), r => this.reject(r))
-            } catch (e) {
-                this.reject(e)
-            }
+            this.resolveWithObject(x)
         } else {
             this.resolve(x)
         }
+    }
+
+    resolveWithSelf(x){
+        this.reject(new TypeError())
+    }
+
+    resolveWithPromise(x){
+        x.then(result => this.resolve(result), reason => this.reject(reason))
+    }
+
+    resolveWithObject(x){
+        let then = this.getThen(x)
+        if(then instanceof Function){
+            this.resolveWithThenable(x)
+        }else{
+            this.resolve(x)
+        }
+    }
+    resolveWithThenable(x){
+        try{
+            x.then(result => this.resolve(result), reason => this.reject(reason))
+        }catch (e){
+            this.reject(e)
+        }
+    }
+    getThen(x){
+        let then
+        try{
+            then = x.then
+        }catch (e){
+            this.reject(e)
+        }
+        return then
     }
 
 
@@ -73,8 +102,7 @@ class Promise {
         if (typeof onRejected === 'function') {
             handle[1] = onRejected
         }
-        handle[2] = new Promise(() => {
-        })
+        handle[2] = new Promise(() => {})
         this.callbacks.push(handle)
         return handle[2]
     }
