@@ -120,4 +120,31 @@ describe('Promise',()=>{
         })
     })
 
+    it('2.2.6.1 then 可以被多次调用，且onFulfilled 按顺序执行',()=>{
+        const promise = new Promise((resolve,reject)=>{ resolve()})
+        const callbacks = [sinon.fake(),sinon.fake(),sinon.fake()]
+        promise.then(callbacks[0])
+        promise.then(callbacks[1])
+        promise.then(callbacks[2])
+
+        setTimeout(()=>{
+            assert(callbacks[0].called)
+            assert(callbacks[1].calledAfter(callbacks[0]))
+            assert(callbacks[2].calledAfter(callbacks[1]))
+        },0)
+    })
+    it('2.2.6.2 then 可以被多次调用，onRejected  按顺序执行',()=>{
+        const promise = new Promise((resolve,reject)=>{ reject()})
+        const callbacks = [sinon.fake(),sinon.fake(),sinon.fake()]
+        promise.then(null, callbacks[0])
+        promise.then(null, callbacks[1])
+        promise.then(null, callbacks[2])
+
+        setTimeout(()=>{
+            assert(callbacks[0].called)
+            assert(callbacks[1].calledAfter(callbacks[0]))
+            assert(callbacks[2].calledAfter(callbacks[1]))
+        },0)
+    })
+
 })

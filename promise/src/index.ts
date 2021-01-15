@@ -1,7 +1,6 @@
 class Promise {
     state = 'pending'
-    onFulfilled = null
-    onRejected = null
+    callbacks = []
 
     constructor(fn: Function) {
         if (typeof fn !== 'function') {
@@ -14,7 +13,9 @@ class Promise {
         if(this.state!=='pending') return
         this.state = 'fulfilled'
         setTimeout(() => {
-            this.onFulfilled.call(undefined,result)
+            this.callbacks.forEach(handle=>{
+                handle[0] && handle[0].call(undefined,result)
+            })
         }, 0)
     }
 
@@ -22,17 +23,21 @@ class Promise {
         if(this.state!=='pending') return
         this.state = 'rejected'
         setTimeout(() => {
-            this.onRejected.call(undefined,reason)
+            this.callbacks.forEach(handle=>{
+                handle[1] && handle[1].call(undefined,reason)
+            })
         }, 0)
     }
 
     then(onFulfilled?, onRejected?) {
+        const handle = []
         if (typeof onFulfilled === 'function') {
-            this.onFulfilled = onFulfilled
+            handle[0] = onFulfilled
         }
         if(typeof onRejected === 'function'){
-            this.onRejected = onRejected
+            handle[1] = onRejected
         }
+        this.callbacks.push(handle)
     }
 }
 
