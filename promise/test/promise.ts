@@ -27,5 +27,10 @@ describe('Promise',()=>{
         // @ts-ignore
         assert.isFunction(promise.then)
     })
+    it('then方法有两个参数, onFulfilled和onRejected是可选的',()=>{
+        const promise = new Promise(()=>{})
+        promise.then(null)
+        assert(1===1)
+    })
 
 })

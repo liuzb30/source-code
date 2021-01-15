@@ -4,7 +4,7 @@ class Promise{
             throw new Error('fn必须是一个函数')
         }
     }
-    then(){}
+    then(onFulfilled?, onRejected?){}
 }
 
 export default Promise
