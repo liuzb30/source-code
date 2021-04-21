@@ -1,4 +1,4 @@
-const bind = require('../src/index')
+const bind = require('../src/bind')
 
 
 test1("fn.bind 能用");
@@ -9,24 +9,24 @@ test5("new 的时候绑定了 p1, p2");
 test6("new 的时候绑定了 p1, p2，并且 fn 有 prototype.sayHi");
 test7("不用 new 但是用类似的对象");
 
-function test1(msg){
+function test1(msg) {
     Function.prototype.bind2 = bind
-    console.assert(typeof Function.prototype.bind2==='function' ) //断言bind2是一个函数
+    console.assert(typeof Function.prototype.bind2 === 'function') //断言bind2是一个函数
     console.log(msg);
 }
 
 
-function test2(msg){
-    const fn = function (){return this} // 返回this
-    const newFn = fn.bind2({name:'xxx'}) // 绑定对象{name:'xxx'}
-    console.assert(newFn().name==='xxx') //断言返回的对象的name等于'xxx'
+function test2(msg) {
+    const fn = function () { return this } // 返回this
+    const newFn = fn.bind2({ name: 'xxx' }) // 绑定对象{name:'xxx'}
+    console.assert(newFn().name === 'xxx') //断言返回的对象的name等于'xxx'
     console.log(msg)
 }
 
 function test3(message) {
     console.log(message);
     Function.prototype.bind2 = bind;
-    const fn2 = function(p1, p2) {
+    const fn2 = function (p1, p2) {
         return [this, p1, p2];
     };
 
@@ -39,7 +39,7 @@ function test3(message) {
 function test4(message) {
     console.log(message);
     Function.prototype.bind2 = bind;
-    const fn2 = function(p1, p2) {
+    const fn2 = function (p1, p2) {
         return [this, p1, p2];
     };
     const anotherFn2 = fn2.bind2({ name: "xxx" }, 123);
@@ -51,7 +51,7 @@ function test4(message) {
 function test5(message) {
     console.log(message);
     Function.prototype.bind2 = bind;
-    const fn = function(p1, p2) {
+    const fn = function (p1, p2) {
         this.p1 = p1;
         this.p2 = p2;
     };
@@ -64,11 +64,11 @@ function test5(message) {
 function test6(message) {
     console.log(message);
     Function.prototype.bind2 = bind;
-    const fn = function(p1, p2) {
+    const fn = function (p1, p2) {
         this.p1 = p1;
         this.p2 = p2;
     };
-    fn.prototype.sayHi = function() {};
+    fn.prototype.sayHi = function () { };
     const fn2 = fn.bind2(undefined, "x", "y");
     const object = new fn2();
     console.assert(object.p1 === "x", "x");
@@ -81,11 +81,11 @@ function test6(message) {
 function test7(message) {
     console.log(message);
     Function.prototype.bind2 = bind;
-    const fn = function(p1, p2) {
+    const fn = function (p1, p2) {
         this.p1 = p1;
         this.p2 = p2;
     };
-    fn.prototype.sayHi = function() {};
+    fn.prototype.sayHi = function () { };
     const object1 = new fn("a", "b");
     const fn2 = fn.bind2(object1, "x", "y");
     const object = fn2(); // 没有new
